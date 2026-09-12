@@ -407,6 +407,29 @@ main{position:relative;z-index:3}
 .light dd{font-size:20px;font-weight:700;letter-spacing:-0.03em;padding:23px 0;border-top:1px solid rgba(5,4,10,.1);line-height:1.5}
 .light dd a{color:#B8246A;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
 .light dd a:hover{color:#8C1A50}
+.refund{margin-top:clamp(34px,5vh,54px);border-top:1px solid rgba(5,4,10,.1)}
+.refund summary{list-style:none;cursor:pointer;padding:23px 0;font-size:17px;font-weight:700;
+  letter-spacing:-0.03em;color:#1A1622;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.refund summary::-webkit-details-marker{display:none}
+.refund summary:hover{color:#8C1A50}
+.refund summary:focus-visible{outline:2px solid #B8246A;outline-offset:4px;border-radius:6px}
+.rArrow{width:11px;height:11px;border-right:2px solid #6A6476;border-bottom:2px solid #6A6476;
+  transform:rotate(45deg) translate(-3px,-3px);transition:transform .3s var(--E);flex:none}
+.refund[open] .rArrow{transform:rotate(-135deg) translate(-3px,-3px)}
+.rBody{padding-bottom:30px}
+.rLead{font-size:15px;color:#4A4456;line-height:1.7;margin:0 0 18px}
+.refund table{width:100%;border-collapse:collapse;font-size:15px}
+.refund th{text-align:left;font-weight:600;color:#6A6476;font-size:13px;letter-spacing:.02em;
+  padding:0 0 10px;border-bottom:1px solid rgba(5,4,10,.12)}
+.refund td{padding:14px 0;border-bottom:1px solid rgba(5,4,10,.07);color:#1A1622;line-height:1.6;vertical-align:top}
+.refund td:first-child{width:38%;padding-right:16px;color:#4A4456}
+.refund tbody tr:last-child td{border-bottom:0}
+.rWithdraw{margin:18px 0 0;font-size:14px;line-height:1.8;color:#4A4456}
+.rWithdraw b{color:#1A1622;font-weight:600}
+.rNote{margin:18px 0 0;padding:17px 19px;background:rgba(184,36,106,.055);border-radius:12px;
+  font-size:15px;line-height:1.7;color:#1A1622}
+.rList{margin:18px 0 0;padding-left:18px;font-size:14px;line-height:1.9;color:#4A4456}
+.rList b{color:#1A1622;font-weight:600}
 .light dd small{display:block;font-size:15px;color:#6A6476;font-weight:400;margin-top:7px;line-height:1.65}
 
 /* ═══ 피날레 ═══ */
@@ -466,6 +489,7 @@ body.thin .mq{background:rgba(10,8,16,.96)}
   .slitBox{width:76vw;height:13svh}
   .pathStick{grid-template-columns:74px 1fr;gap:20px}#pathSvg{width:74px}
   .light{padding:150px 0 150px}.light dl{grid-template-columns:1fr}
+  .refund td:first-child{width:44%}.refund summary{font-size:16px}
   .light dt{padding-bottom:0}.light dd{border-top:0;padding-top:7px}
   .end{padding:128px 0 140px}
   .btn{padding:22px 46px;font-size:18px}.ghost{padding:21px 34px;font-size:16px}
@@ -713,6 +737,32 @@ setTimeout(function(){
     <dt>다녀간 분들</dt><dd><a href="https://www.instagram.com/heobotss/" target="_blank" rel="noopener">인스타그램에 정리해 두었습니다</a><small>하이라이트에 수강생 이야기를 모아 두었습니다</small></dd>
     <dt>참석비</dt><dd>신청서에서 확인<small>신청 폼 첫 화면에 적혀 있습니다</small></dd>
   </dl>
+
+  <details class="refund">
+    <summary>환불 규정<span class="rArrow" aria-hidden="true"></span></summary>
+    <div class="rBody">
+      <p class="rLead">기준은 <b>세미나 당일 0시</b>입니다. 취소 말씀이 저에게 도착한 때로 셉니다.</p>
+      <table>
+        <thead><tr><th scope="col">언제</th><th scope="col">어떻게</th></tr></thead>
+        <tbody>
+          <tr><td>세미나 8일 전까지</td><td>전액 돌려드립니다</td></tr>
+          <tr><td>7일 전 ~ 3일 전</td><td>70% 환불, 또는 다음 회차로 전액 이월</td></tr>
+          <tr><td>2일 전 ~ 전날</td><td>다음 회차로 전액 이월</td></tr>
+          <tr><td>당일 · 안 오신 경우</td><td>환불과 이월 모두 어렵습니다</td></tr>
+        </tbody>
+      </table>
+      <p class="rWithdraw">신청하신 지 <b>7일이 안 되셨다면</b> 위 표와 상관없이 전액 돌려드립니다.
+        세미나 전날까지요. 법으로 정해진 권리입니다.</p>
+      <p class="rNote"><b>못 오시게 되면 다른 트레이너에게 자리를 넘기실 수 있습니다.</b>
+        세미나 2일 전까지 오실 분 성함만 알려 주시면 됩니다. 이게 제일 간단하더라고요.</p>
+      <ul class="rList">
+        <li>다음 회차 이월은 <b>한 번</b>, 6개월 안의 회차까지입니다</li>
+        <li>제 사정으로 취소하거나 날짜를 옮기면 <b>전액 돌려드립니다</b></li>
+        <li>신청 인원이 너무 적어 진행이 어려우면 열지 않고 <b>전액 돌려드립니다</b></li>
+      </ul>
+    </div>
+  </details>
+
   <p class="brandline"><b>4T</b>는 <b>For Trainer</b>입니다. 영어로 four 와 for 가 같은 소리라서,
     트레이너를 위한 자리라는 뜻으로 이름 앞에 붙였습니다.</p>
 </div></section>
