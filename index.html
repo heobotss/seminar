@@ -509,6 +509,9 @@ body.inapp{background:var(--bk)}
      슬릿은 틈으로 살짝 보이다 펼쳐지는 연출이라 cover 가 맞다 — 좌우가 잘려도 사람이 크게 보인다. */
   .slitBox{width:76vw;height:13svh}
   .pathStick{grid-template-columns:74px 1fr;gap:20px}#pathSvg{width:74px}
+  /* ⚠ 큰 숫자의 빛 번짐은 폰에서 끈다. 숫자·획 굵기·크기가 매 프레임 바뀌는데
+     그때마다 48px 블러를 다시 계산하면 되감을 때 숫자가 뒤섞여 보인다 */
+  .tItem .v{filter:none}
   .light{padding:150px 0 150px}.light dl{grid-template-columns:1fr}
   .refund td:first-child{width:44%}.refund summary{font-size:16px}
   .light dt{padding-bottom:0}.light dd{border-top:0;padding-top:7px}
@@ -1360,9 +1363,11 @@ function takeStep(){
   /* 사라지는 쪽을 더 빨리 끊는다. 280px 짜리 숫자는 투명도 0.05 만 남아도
      다음 숫자와 겹쳐 보여서 「애니메이션이 깨진 것」처럼 읽힌다. */
   tItems.forEach(function(el,i){var L=(p-i*seg)/seg,o,ty,sc;
-    if(L<-.2||L>1.1){o=0;ty=0;sc=.9}
-    else if(L<.12){o=cl((L+.2)/.32,0,1);ty=50*(1-o);sc=.9+.1*o}
-    else if(L>.9){o=cl((1.1-L)/.2,0,1);ty=-50*(1-o);sc=1+.1*(1-o)}
+    /* 폰에서는 교차 구간을 더 좁힌다 — 280px 숫자 둘이 겹치면 뒤섞인 것처럼 읽힌다 */
+    var 여유=MOB?.1:.2, 끝=MOB?1.05:1.1;
+    if(L<-여유||L>끝){o=0;ty=0;sc=.9}
+    else if(L<.12){o=cl((L+여유)/(여유+.12),0,1);ty=50*(1-o);sc=.9+.1*o}
+    else if(L>.9){o=cl((끝-L)/(끝-.9),0,1);ty=-50*(1-o);sc=1+.1*(1-o)}
     else{o=1;ty=0;sc=1}
     /* 280px 짜리 그라데이션 숫자라, scale 이 조금만 달라져도 글자를 통째로 다시 그린다.
        (translate·opacity 는 합성만 하면 되지만 scale 은 아니다)
@@ -1380,7 +1385,10 @@ function takeStep(){
       var 세기=cl((L+.24)/.42,0,1);
       var 숫자=Math.round((+v.dataset.n)*세기);
       if(v._v!==숫자){v._v=숫자;v.textContent=숫자}
-      var wv=Math.round((150+650*세기)/50)*50;     /* 차오를수록 획도 굵어진다 */
+      /* 굵기가 바뀌면 글자를 통째로 다시 그린다. 폰에서는 단계를 네 배로 끊어
+         다시 그리는 횟수를 줄인다 — 눈에는 차이가 없다 */
+      var 단계=MOB?200:50;
+      var wv=Math.round((150+650*세기)/단계)*단계;
       if(v._w!==wv){v._w=wv;v.style.fontVariationSettings="'wght' "+wv}
     }});
   if(arcLive){
