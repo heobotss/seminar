@@ -324,7 +324,7 @@ main{position:relative;z-index:3}
 .slitBox .inner{position:absolute;inset:-10%;display:flex;align-items:center;justify-content:center;will-change:transform}
 /* 이 한 장만 색을 살린다 — 사람이 모인 장면은 컬러여야 「실제로 있었던 일」로 읽힌다.
    나머지 사진의 흑백 톤과 부딪히지 않게 채도만 조금 눌러 둔다. */
-.slitBox .inner img{width:100%;height:100%;object-fit:cover;object-position:center 46%;
+.slitBox .inner img{width:100%;height:100%;object-fit:cover;object-position:center 50%;
   filter:saturate(.86) contrast(1.05)}
 /* 아래쪽 여백은 떠 있는 신청 버튼(.dock) 자리를 비워 두는 값이다 — 줄이면 글자가 가린다 */
 .slitCap{position:absolute;left:0;right:0;bottom:0;padding:190px 30px 132px;pointer-events:none;
@@ -689,10 +689,10 @@ setTimeout(function(){
 
 <div class="slit" id="slit"><div class="slitStick">
   <div class="slitBox" id="slitBox"><div class="inner" id="slitInner">
-    <img src="img/voices.webp" alt="세미나를 다녀간 트레이너들이 직접 올린 후기 열두 장" width="2454" height="1332" loading="lazy" decoding="async">
+    <img src="img/people.webp" alt="서로 다른 회차의 세미나를 마친 트레이너들이 수료증을 들고 함께 찍은 단체 사진 두 장" width="2663" height="1000" loading="lazy" decoding="async">
   </div></div>
   <div class="slitCap" id="slitCap"><p>
-    <span class="ln"><i>다녀간 분들이 남긴 말입니다</i></span>
+    <span class="ln"><i>지나간 자리마다 사람이 남았습니다</i></span>
     <span class="ln"><i>돌아갈 때는 다음 달에 어디에 뭘 올릴지가 정해져 있거든요</i></span>
   </p></div>
 </div></div>
@@ -1470,7 +1470,7 @@ function slitStep(){if(!slitSec||!box)return;
     var 응결=cl((p-.10)/.40,0,1), b=Math.round((1-응결)*최대);
     if(b!==slitBlur){
       slitBlur=b;
-      slitImg.style.filter='saturate(.34) contrast(1.06) brightness(1.02)'+(b?' blur('+b+'px)':'');
+      slitImg.style.filter='saturate(.9) contrast(1.04) brightness(1.02)'+(b?' blur('+b+'px)':'');
       slitImg.style.transform='scale('+(1+b*0.006).toFixed(3)+')';
     }
   }
