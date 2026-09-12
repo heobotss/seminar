@@ -2,6 +2,8 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<meta name="color-scheme" content="dark">
+<meta name="supported-color-schemes" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>4T 트레이너 마케팅 세미나 — 허봇스</title>
 
@@ -30,6 +32,7 @@
 
 <style>
 :root{
+  color-scheme:dark;   /* 인앱 브라우저의 강제 밝기 변환을 막는다 */
   --bk:#05040A; --bk2:#0A0810; --wt:#FAF8FC;
   /* --gy 는 읽는 글자(대비 5.8:1), --gy2 는 장식·지나가는 글자, --gy3 는 점등 전 상태.
      읽어야 하는 문장에 --gy2 를 쓰면 2.5:1 이라 실제로 안 읽힌다. */
@@ -64,7 +67,7 @@ img{display:block;max-width:100%}
 /* ═══ 전역 레이어 ═══ */
 #sky{position:fixed;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(ellipse 90% 70% at 50% 40%,rgba(140,62,174,.12),transparent 62%)}
-#field{position:fixed;inset:0;z-index:1;width:100%;height:100%;pointer-events:none}
+#field{position:fixed;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;background:var(--bk)}
 #veil{position:fixed;inset:0;z-index:2;pointer-events:none;
   background:radial-gradient(ellipse 78% 64% at 50% 50%,transparent 26%,rgba(5,4,10,.66) 90%)}
 main{position:relative;z-index:3}
@@ -880,9 +883,13 @@ var W,H,DPR,CX,CY,MOB=innerWidth<720,P=[],T=[];
 var MX=-9999,MY=-9999,LMX=-9999,LMY=-9999;   /* L 은 부드럽게 따라오는 커서 */
 
 /* 기기 성능에 맞춰 입자 수를 정한다 */
+/* 카카오·인스타·네이버 안에서 열면 메모리가 빠듯해 WebGL 이 자주 끊긴다.
+   그 안에서는 입자를 크게 줄여 애초에 안 끊기게 한다 */
+var 인앱=/KAKAOTALK|Instagram|NAVER|FBAN|FBAV|Line\//i.test(navigator.userAgent);
 function 입자수(){
   var core=navigator.hardwareConcurrency||4, mem=navigator.deviceMemory||4;
   if(GPU){
+    if(인앱)return MOB?9000:22000;
     if(MOB)return core<=4?16000:34000;
     if(core<=2||mem<=2)return 26000;
     if(core<=4||mem<=4)return 60000;
@@ -1596,6 +1603,23 @@ if(!GPU){
   if(cv.parentNode) cv.parentNode.replaceChild(새캔버스,cv);
   cv=새캔버스;
   cx2=cv.getContext('2d');
+}
+
+/* ⚠ 인앱 브라우저(카카오·인스타)는 메모리가 모자라면 WebGL 컨텍스트를 그냥 회수해 간다.
+   그 순간 캔버스가 비어 화면이 허옇게 뜨는데, 대비가 없으면 영영 그대로다.
+   손실을 잡아 캔버스를 새로 갈고 2D 로 내려앉는다 — 화려함은 잃어도 화면은 산다. */
+if(GPU&&cv&&cv.addEventListener){
+  cv.addEventListener('webglcontextlost',function(e){
+    e.preventDefault();
+    if(window.console&&console.warn)console.warn('[허봇스] WebGL 컨텍스트를 잃었습니다 — 2D 로 내려앉습니다.');
+    GPU=null;
+    var 대체=cv.cloneNode(false);
+    if(cv.parentNode) cv.parentNode.replaceChild(대체,cv);
+    cv=대체;
+    try{ cx2=cv.getContext('2d'); }catch(_){ cx2=null; }
+    if(cx2){ N=입자수(); NLive=N; 줄인횟수=0; sizeF(); build(); }
+    else if(cv.style){ cv.style.display='none'; }   /* 2D 도 안 되면 아예 감춘다 */
+  },false);
 }
 N=입자수(); NLive=N;
 sizeF();sizeA();
