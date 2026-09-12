@@ -399,12 +399,19 @@ main{position:relative;z-index:3}
 /* ═══ 흰 구간 ═══ */
 /* 아래쪽도 굴려서 흰 면이 어두운 면 위에 얹힌 판처럼 보이게 한다 — 직선으로 끊기면 잘린 것처럼 보인다 */
 /* 아래 여백이 넉넉해야 떠 있는 신청 버튼이 마지막 줄을 가리지 않는다 */
-.light{background:var(--wt);color:var(--bk);padding:196px 0 196px;border-radius:34px;box-shadow:0 -40px 90px rgba(0,0,0,.6);position:relative;z-index:4}
+.light{color:var(--wt);padding:196px 0 196px;border-radius:34px;position:relative;z-index:4;overflow:hidden;
+  background:linear-gradient(168deg,#151021 0%,#0D0A15 46%,#100C1A 100%);
+  box-shadow:0 -40px 90px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.07)}
+/* 다른 구간의 빛과 이어지도록 은은한 빛무리를 깐다 — 그림 한 장이라 스크롤해도 다시 안 그린다 */
+.light::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 44% at 16% 0%,rgba(140,62,174,.30),transparent 62%),
+             radial-gradient(ellipse 62% 40% at 92% 96%,rgba(232,64,127,.22),transparent 60%)}
+.light>*{position:relative;z-index:1}
 .light h2{font-size:clamp(31px,5.6vw,68px);font-weight:800;letter-spacing:-0.055em;line-height:1.16;margin-bottom:22px}
 /* 브랜드 이름 풀이는 정보를 다 읽은 뒤에 온다 — 신청 직전 첫 문장이 어원 설명이면 안 된다 */
-.light .brandline{font-size:15px;color:#6A6476;margin:40px 0 0;line-height:1.8;max-width:32em;
-  padding-top:26px;border-top:1px solid rgba(5,4,10,.1)}
-.light .brandline b{color:var(--bk);font-weight:700}
+.light .brandline{font-size:15px;color:var(--gy);margin:40px 0 0;line-height:1.8;max-width:32em;
+  padding-top:26px;border-top:1px solid rgba(255,255,255,.1)}
+.light .brandline b{color:var(--wt);font-weight:700}
 .light dl{display:grid;grid-template-columns:128px 1fr}
 .light dt,.light dd{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s var(--E)}
 .light.on dt,.light.on dd{opacity:1;transform:none}
@@ -414,34 +421,34 @@ main{position:relative;z-index:3}
 .light.on dl>*:nth-child(9),.light.on dl>*:nth-child(10){transition-delay:.32s}
 .light.on dl>*:nth-child(11),.light.on dl>*:nth-child(12){transition-delay:.40s}
 .light.on dl>*:nth-child(13),.light.on dl>*:nth-child(14){transition-delay:.48s}
-.light dt{font-size:15px;font-weight:600;color:#6A6476;padding:23px 0;border-top:1px solid rgba(5,4,10,.1)}
-.light dd{font-size:20px;font-weight:700;letter-spacing:-0.03em;padding:23px 0;border-top:1px solid rgba(5,4,10,.1);line-height:1.5}
-.light dd a{color:#B8246A;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
-.light dd a:hover{color:#8C1A50}
-.refund{margin-top:clamp(34px,5vh,54px);border-top:1px solid rgba(5,4,10,.1)}
+.light dt{font-size:15px;font-weight:600;color:var(--gy);padding:23px 0;border-top:1px solid rgba(255,255,255,.1)}
+.light dd{font-size:20px;font-weight:700;letter-spacing:-0.03em;padding:23px 0;border-top:1px solid rgba(255,255,255,.1);line-height:1.5;color:var(--wt)}
+.light dd a{color:#FF7FB8;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.light dd a:hover{color:#FFB3D2}
+.refund{margin-top:clamp(34px,5vh,54px);border-top:1px solid rgba(255,255,255,.1)}
 .refund summary{list-style:none;cursor:pointer;padding:23px 0;font-size:17px;font-weight:700;
-  letter-spacing:-0.03em;color:#1A1622;display:flex;align-items:center;justify-content:space-between;gap:14px}
+  letter-spacing:-0.03em;color:var(--wt);display:flex;align-items:center;justify-content:space-between;gap:14px}
 .refund summary::-webkit-details-marker{display:none}
-.refund summary:hover{color:#8C1A50}
-.refund summary:focus-visible{outline:2px solid #B8246A;outline-offset:4px;border-radius:6px}
-.rArrow{width:11px;height:11px;border-right:2px solid #6A6476;border-bottom:2px solid #6A6476;
+.refund summary:hover{color:#FF7FB8}
+.refund summary:focus-visible{outline:2px solid #FF7FB8;outline-offset:4px;border-radius:6px}
+.rArrow{width:11px;height:11px;border-right:2px solid var(--gy);border-bottom:2px solid var(--gy);
   transform:rotate(45deg) translate(-3px,-3px);transition:transform .3s var(--E);flex:none}
 .refund[open] .rArrow{transform:rotate(-135deg) translate(-3px,-3px)}
 .rBody{padding-bottom:30px}
-.rLead{font-size:15px;color:#4A4456;line-height:1.7;margin:0 0 18px}
+.rLead{font-size:15px;color:var(--gy);line-height:1.7;margin:0 0 18px}
 .refund table{width:100%;border-collapse:collapse;font-size:15px}
-.refund th{text-align:left;font-weight:600;color:#6A6476;font-size:13px;letter-spacing:.02em;
-  padding:0 0 10px;border-bottom:1px solid rgba(5,4,10,.12)}
-.refund td{padding:14px 0;border-bottom:1px solid rgba(5,4,10,.07);color:#1A1622;line-height:1.6;vertical-align:top}
-.refund td:first-child{width:38%;padding-right:16px;color:#4A4456}
+.refund th{text-align:left;font-weight:600;color:var(--gy);font-size:13px;letter-spacing:.02em;
+  padding:0 0 10px;border-bottom:1px solid rgba(255,255,255,.14)}
+.refund td{padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08);color:var(--wt);line-height:1.6;vertical-align:top}
+.refund td:first-child{width:38%;padding-right:16px;color:var(--gy)}
 .refund tbody tr:last-child td{border-bottom:0}
-.rWithdraw{margin:18px 0 0;font-size:14px;line-height:1.8;color:#4A4456}
-.rWithdraw b{color:#1A1622;font-weight:600}
-.rNote{margin:18px 0 0;padding:17px 19px;background:rgba(184,36,106,.055);border-radius:12px;
-  font-size:15px;line-height:1.7;color:#1A1622}
-.rList{margin:18px 0 0;padding-left:18px;font-size:14px;line-height:1.9;color:#4A4456}
-.rList b{color:#1A1622;font-weight:600}
-.light dd small{display:block;font-size:15px;color:#6A6476;font-weight:400;margin-top:7px;line-height:1.65}
+.rWithdraw{margin:18px 0 0;font-size:14px;line-height:1.8;color:var(--gy)}
+.rWithdraw b{color:var(--wt);font-weight:600}
+.rNote{margin:18px 0 0;padding:17px 19px;background:rgba(255,127,184,.10);border-radius:12px;
+  border:1px solid rgba(255,127,184,.18);font-size:15px;line-height:1.7;color:var(--wt)}
+.rList{margin:18px 0 0;padding-left:18px;font-size:14px;line-height:1.9;color:var(--gy)}
+.rList b{color:var(--wt);font-weight:600}
+.light dd small{display:block;font-size:15px;color:var(--gy);font-weight:400;margin-top:7px;line-height:1.65}
 
 /* ═══ 피날레 ═══ */
 .end{position:relative;padding:200px 0 210px;text-align:center;overflow:hidden;z-index:4}
