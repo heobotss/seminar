@@ -482,6 +482,15 @@ body.thin .mark{background:rgba(12,9,18,.96)}
 body.thin .dock{background:rgba(12,9,18,.95)}
 body.thin .card{background:linear-gradient(168deg,rgba(24,19,34,.96),rgba(14,11,20,.96))}
 body.thin .mq{background:rgba(10,8,16,.96)}
+/* ⚠ 인앱 브라우저(카카오·인스타)에서는 매 프레임 다시 그리는 것을 전부 끈다.
+   화면을 덮은 캔버스를 초당 수십 번 지우고 그리면 웹뷰가 못 따라가고,
+   아직 안 그린 자리를 회색으로 보여준다 — 그게 「깜빡임」의 정체다.
+   연출은 잃지만 화면은 멀쩡해진다. */
+body.inapp #field,body.inapp .card canvas,body.inapp #grain,body.inapp #cur,body.inapp #dot{display:none!important}
+body.inapp .heroBg::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 120% 80% at 50% 34%,rgba(140,62,174,.34),transparent 64%),
+             radial-gradient(ellipse 90% 60% at 74% 76%,rgba(232,64,127,.22),transparent 60%)}
+body.inapp{background:var(--bk)}
 
 @media(max-width:720px){
   body{font-size:16px}
@@ -1122,6 +1131,9 @@ function 정리(el,p){
 
 function renderF(ts){
   hpS=lerp(hpS,hp,.075);
+  /* ⚠ 히어로 진행도(hpS)는 사진·글자 연출도 함께 쓰므로 먼저 갱신하고,
+     그 뒤부터 건너뛴다. 여기서 통째로 반환하면 히어로가 멈춘다 */
+  if(인앱)return;
   var speed=Math.abs(sVel);
   spin+=.0013+hpS*.0024+cl(speed*.00016,0,.012);
 
@@ -1448,7 +1460,7 @@ function railStep(){
        통째로 NaN 이 되어 카드 강조와 그래프가 조용히 죽는다 (실제로 그렇게 됐었다) */
     var 가운데=dd<r.width*.55; if(cd._m!==가운데){cd._m=가운데;cd.classList.toggle('mid',가운데)}
     var cvs=cd.querySelector('canvas');
-    if(cvs){var t=cl((near-.28)/.6,0,1);if(drawn[i]!==t.toFixed(2)){drawn[i]=t.toFixed(2);cardGraph(cvs,cd.dataset.g,t)}}});
+    if(cvs&&!인앱){var t=cl((near-.28)/.6,0,1);if(drawn[i]!==t.toFixed(2)){drawn[i]=t.toFixed(2);cardGraph(cvs,cd.dataset.g,t)}}});
   if(pg)pg.textContent='0'+(best+1)+' / 04';
 }
 
@@ -1558,10 +1570,11 @@ var fpsT=0,fpsN=0,줄인횟수=0,가벼움=false;
 /* 인앱 브라우저는 처음부터 가볍게 간다 — 프레임이 떨어진 뒤에 켜면 이미 늦다.
    backdrop-filter 는 스크롤할 때마다 배경을 다시 흐리게 만들어야 해서
    안드로이드 웹뷰에서 화면이 깜빡이는 가장 큰 원인이다 */
+function 인앱표시(){var b=document.body; if(!b)return; b.classList.add('thin'); b.classList.add('inapp');}
 if(인앱){
   가벼움=true;
-  if(document.body)document.body.classList.add('thin');
-  else document.addEventListener('DOMContentLoaded',function(){document.body.classList.add('thin')},{once:true});
+  if(document.body)인앱표시();
+  else document.addEventListener('DOMContentLoaded',인앱표시,{once:true});
 }
 function 성능감시(ts){
   if(!fpsT){fpsT=ts;return}
