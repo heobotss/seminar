@@ -477,7 +477,8 @@ footer{padding:54px 0 118px;font-size:15px;color:var(--gy);border-top:1px solid 
    그레인(전면 블렌드)과 유리 블러(backdrop-filter)는 합성 단계에서 값이 비싸다 —
    입자를 줄이는 것보다 이쪽을 끄는 편이 프레임을 더 많이 돌려준다. */
 body.thin #grain{display:none}
-body.thin .dock,body.thin .card,body.thin .mq{backdrop-filter:none;-webkit-backdrop-filter:none}
+body.thin .dock,body.thin .card,body.thin .mq,body.thin .mark{backdrop-filter:none;-webkit-backdrop-filter:none}
+body.thin .mark{background:rgba(12,9,18,.96)}
 body.thin .dock{background:rgba(12,9,18,.95)}
 body.thin .card{background:linear-gradient(168deg,rgba(24,19,34,.96),rgba(14,11,20,.96))}
 body.thin .mq{background:rgba(10,8,16,.96)}
@@ -1554,6 +1555,14 @@ function onScroll(){
 
 /* 프레임이 밀리면 입자를 줄인다. 한 번 줄이면 다시 올리지 않는다 — 널뛰기가 더 거슬린다. */
 var fpsT=0,fpsN=0,줄인횟수=0,가벼움=false;
+/* 인앱 브라우저는 처음부터 가볍게 간다 — 프레임이 떨어진 뒤에 켜면 이미 늦다.
+   backdrop-filter 는 스크롤할 때마다 배경을 다시 흐리게 만들어야 해서
+   안드로이드 웹뷰에서 화면이 깜빡이는 가장 큰 원인이다 */
+if(인앱){
+  가벼움=true;
+  if(document.body)document.body.classList.add('thin');
+  else document.addEventListener('DOMContentLoaded',function(){document.body.classList.add('thin')},{once:true});
+}
 function 성능감시(ts){
   if(!fpsT){fpsT=ts;return}
   fpsN++;
@@ -1593,7 +1602,9 @@ function sizeAll(){
 
 /* WebGL 을 먼저 시도한다. 한 캔버스는 컨텍스트를 한 번만 고를 수 있으므로 순서가 중요하다 —
    2D 를 먼저 얻어 버리면 그 캔버스로는 WebGL 을 영영 못 쓴다. */
-try{ GPU=makeGPU(cv); }
+/* 카카오·인스타 안에서는 WebGL 을 쓰지 않는다. 메모리가 모자라면 브라우저가
+   컨텍스트를 회수해 가는데, 그 순간 화면이 허옇게 뜬다. 2D 는 회수당하지 않는다 */
+try{ GPU = 인앱 ? null : makeGPU(cv); }
 catch(err){ GPU=null; if(window.console&&console.warn)console.warn('[허봇스] WebGL 을 못 켰습니다. 캔버스 2D 로 갑니다 —',err.message); }
 if(!GPU){
   /* ⚠ 여기서 그냥 getContext('2d') 를 부르면 null 이 온다 — 위에서 webgl 컨텍스트를
